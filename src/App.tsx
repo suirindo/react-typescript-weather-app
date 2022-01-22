@@ -2,6 +2,7 @@ import { useState } from 'react' // state = データの保管場所
 import Title from './components/Title'
 import Form from './components/Form'
 import Results from './components/Results'
+import Loading from 'components/Loading'
 import './App.css'
 
 type ResultsStateType = {
@@ -14,6 +15,7 @@ type ResultsStateType = {
 
 // 自分で作成したタグの最初の文字は大文字で始めること。＝ReactコンポーネントであることをReactに伝える。
 function App() {
+  const [loading, setLoading] = useState<boolean>(false)
   const [city, setCity] = useState<string>('') // city = state,ユーザーが入力した都市名はここに保管される。 setCity:stateにデータを書き込んだり操作したりする仕組み。
   const [results, setResults] = useState<ResultsStateType>({
     country: '',
@@ -24,6 +26,7 @@ function App() {
   })
   const getWeather = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
     fetch(
       `https://api.weatherapi.com/v1/current.json?key=730baec80e6c45fd91b85720212612&q=${city}&aqi=no`,
     ) // 都市名のデータをAPIに渡している。受け取りはthenを使う。
@@ -36,14 +39,22 @@ function App() {
           conditionText: data.current.condition.text,
           icon: data.current.condition.icon,
         })
+        setCity('')
+        setLoading(false)
       }) // これで、受け取った気象データが[results state]に保管されることになる。
+      .catch((err) =>
+        alert(
+          'エラーが発生しました。ページをリロードして、もう一度トライしてください。',
+        ),
+      )
   }
   return (
     <div className="wrapper">
       <div className="container">
         <Title />
-        <Form setCity={setCity} getWeather={getWeather} />
+        <Form setCity={setCity} getWeather={getWeather} city={city} />
         <Results results={results} />
+        {loading ? <Loading /> : <Results results={results} />}
       </div>
     </div>
   )

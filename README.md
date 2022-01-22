@@ -1,3 +1,9 @@
+# Deploy from this GitHub, using netlify: 
+https://eager-mclean-35f408.netlify.app/
+
+# Reference: 
+https://amzn.to/33XRyvI
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
