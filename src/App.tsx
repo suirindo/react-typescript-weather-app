@@ -22,10 +22,10 @@ function App() {
     conditionText: '',
     icon: '',
   })
-  const getWeather = (e: any) => {
+  const getWeather = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     fetch(
-      'https://api.weatherapi.com/v1/current.json?key=730baec80e6c45fd91b85720212612&q=London&aqi=no',
+      `https://api.weatherapi.com/v1/current.json?key=730baec80e6c45fd91b85720212612&q=${city}&aqi=no`,
     ) // 都市名のデータをAPIに渡している。受け取りはthenを使う。
       .then((res) => res.json()) // このresの中にAPIから送り返された気象データが入っている。
       .then((data) => {
@@ -39,12 +39,13 @@ function App() {
       }) // これで、受け取った気象データが[results state]に保管されることになる。
   }
   return (
-    <div className="test">
-      <Title />
-      <Form setCity={setCity} getWeather={getWeather} />
-      <Results results={results} />
+    <div className="wrapper">
+      <div className="container">
+        <Title />
+        <Form setCity={setCity} getWeather={getWeather} />
+        <Results results={results} />
+      </div>
     </div>
   )
 }
-
 export default App
